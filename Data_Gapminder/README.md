@@ -1,5 +1,3 @@
-# Portfolio-Projects
-
 I tried to replicate a chart created by Cedric Scherer using the Gapminder dataset.
 
 My Final version:
