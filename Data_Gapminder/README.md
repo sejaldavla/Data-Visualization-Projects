@@ -1,5 +1,4 @@
 # Portfolio-Projects
-A collection of my personal projects.
 
 I tried to replicate a chart created by Cedric Scherer using the Gapminder dataset.
 
