@@ -1,0 +1,181 @@
+---
+title: "sleep efficiency"
+author: Sejal Davla, PhD
+format: html
+editor: visual
+---
+
+## Sleep Efficiency Dataset
+
+### Data source: https://www.kaggle.com/datasets/equilibriumm/sleep-efficiency/code
+
+
+
+```{r}
+#Data import 
+library(readr) 
+rawdata <- read_csv("/Users/sejaldavla/Desktop/Data_Portfolio/Sleep/Sleep_Efficiency.csv")
+rawdata
+```
+```{r}
+#Required packages for data Cleaning, transformation and visualization 
+library(dplyr) 
+library(ggplot2) 
+library(tidyr) 
+library(RColorBrewer) 
+library(forcats)
+```
+
+
+## Check the data structure, data cleanliness, and distribution
+```{r}
+str(rawdata)
+sum(is.na(rawdata))
+NA_data <- rawdata[!complete.cases(rawdata), ]
+NA_data #Check for each column. No NA values in sleep amount, efficiency, and sleep cycle columns
+```
+
+## Checking data distribution
+```{r}
+A <- as.data.frame(rawdata %>%
+  group_by(Age) %>%
+  count(Gender))
+A
+
+his <- A %>%
+  ggplot(aes(factor(Age), n, fill = Gender)) +
+  geom_col(color = "#444443",alpha = 0.7, 
+           position = position_dodge(preserve = "single")) +
+  scale_y_continuous(limits = c(0,20)) +
+  labs(
+    title = "Sample distibution by age and gender in the sleep data",
+    x = "Age",
+    y = "number of people"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(size = 20),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 15)
+  )
+his
+```
+```{r fig.width= 6, fig.height=5}
+plot <- rawdata %>%
+  ggplot(aes(x = Gender, y = `Sleep duration`)) +
+  geom_violin(width = 0.7, trim = FALSE, fill = "#E6E5E2") +
+  geom_point(aes(color = factor(Age < 18)), 
+             position = position_jitter(), size = 2, shape = 19, alpha = 0.7) +
+  geom_boxplot(color = "black", width = 0.1, alpha = 0.2, outlier.colour = "#F8B31F") +
+  scale_color_manual(values = c("#F8B31F", "#8107F4"),
+                     labels = c("18 and Above", "Below 18")) +
+  scale_y_continuous(limits = c(4, 11),
+                     breaks = seq(4,11, by = 1)) +
+  labs(x = NULL,
+       y = "Sleep duration at night (Hours)",
+       color = "Age") +
+  theme_classic() +
+  theme(
+    axis.line.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(family = "Arial", size = 12),
+    axis.text.x = element_text(size = 15, color = "blue")
+  ) 
+plot
+```
+
+## According to human sleep literature, sleep patterns vary between teenagers and adults. There are only 9 individuals below the age of 18 in this dataset. These data points are removed from further analysis to focus on the adult sleep patterns.
+
+```{r}
+summary <- rawdata %>%
+  filter(Age >= 18) %>%
+  group_by(Gender) %>%
+  summarise(mean = mean(`Sleep duration`),
+            sd = sd(`Sleep duration`),
+            variance = var(`Sleep duration`))
+summary
+```
+### Understanding sleep architecture in individuals. 
+#Throughout the night, sleep cycles through different stages, namely, light sleep, deep sleep, and REM (rapid eye movement) sleep. The following graph shows individual differences in sleep stages. 
+
+```{r}
+#### Plotting data using sleep percentages
+New <- rawdata %>%
+  select(ID, `REM sleep percentage`,`Deep sleep percentage`,`Light sleep percentage`) %>%
+  pivot_longer(!ID, names_to = "sleep percent", values_to = "percent") %>%
+  rename(person = ID)
+
+New %>%
+  ggplot(aes(x = factor(person), y = percent, fill = `sleep percent`)) +
+  geom_bar(position = "stack", stat = "identity") +
+  scale_y_continuous(limits = c(0, 100),
+                     breaks = seq(0, 100, by = 10)) +
+  coord_flip(expand = FALSE, clip = "off") +
+  theme(
+    axis.text.y = element_blank(),
+    axis.line.y = element_blank()
+  )
+```
+
+
+## While sleep pecentages show proportion of individual sleep stages, it does not show them relative to the person's sleep amount. 
+
+
+```{r}
+#Convert sleep stage percentages to duration in hours
+rawdata <- rawdata %>%
+  mutate(REM = (`Sleep duration` * `REM sleep percentage`)/100) %>%
+  mutate(Deep_sleep = (`Sleep duration` * `Deep sleep percentage`) / 100) %>%
+  mutate(Light_sleep = (`Sleep duration` * `Light sleep percentage`) / 100)
+
+```
+
+
+```{r}
+#### Plotting data using sleep amount
+New_amount <- rawdata %>% 
+  select(ID, Light_sleep, Deep_sleep, REM) %>%
+  pivot_longer(!ID, names_to = "sleep amount", values_to = "values") %>%
+  rename(person = ID)
+
+baseplot <- New_amount %>%
+  ggplot(aes(x = reorder(factor(person), -values), y = values, 
+             fill = factor(`sleep amount`, 
+                           levels = c("REM","Deep_sleep","Light_sleep")))) +
+  geom_bar(position = "stack", stat = "identity") +
+  scale_fill_manual(labels = c("REM", "Deep sleep","Light sleep"),
+                    values = c("#D28ECA","#F4F6AF","#656ABB")) +
+  scale_y_continuous(limits = c(0, 10),
+                     breaks = seq(0, 10, by = 1)) +
+  labs(
+    y = "Sleep Amount (Hours)",
+    x = NULL, 
+    fill = "sleep cycle",
+    title = "Sleep cycle variation in human population",
+    subtitle = "While the total night sleep varies a lot from person to person, the REM sleep proportion \nremains unchanged.",
+    caption = "By Sejal Davla, PhD"
+    ) + 
+  coord_flip(expand = FALSE, clip = "off") +
+  theme_bw() +
+  theme(
+    plot.title = element_text(family = "Avenir", size = 20, color = "#472717"),
+    plot.subtitle = element_text(family = "Avenir", size = 10, color = "#24788F"),
+    axis.text.y = element_blank(),
+    axis.line.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    legend.position = c(0.89, 0.78),
+    plot.background = element_rect(colour = "white"),
+    panel.grid = element_blank(),
+    axis.text.x = element_text(family = "Verdana", color = "#282130", size = 10),
+    legend.text = element_text(family = "Verdana", color = "#282130", size = 8),
+    legend.title = element_text(family = "Verdana", size = 10),
+    legend.key.size = unit(0.5, "cm"),
+    legend.box.background = element_rect(color = "grey", size = 2),
+    ) +
+  guides(fill = guide_legend(reverse = TRUE))
+
+baseplot
+
+ggsave("baseplot.png", units = "cm", height = 10, width = 15, dpi = 600)
+```
+
