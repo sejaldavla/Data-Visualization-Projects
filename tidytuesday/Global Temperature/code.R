@@ -53,6 +53,7 @@ temp1 <- zonann_temps %>%
         axis.text.x = element_text(color = "white", 
                                    size = 35,
                                    vjust = -1.5),
+        axis.text.y = element_blank(),                           
         legend.direction = "horizontal",
         legend.position = "None",
         legend.background = element_rect(fill = "#252321"),
