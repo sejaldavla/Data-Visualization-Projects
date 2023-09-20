@@ -1,7 +1,8 @@
 # Data-Visualization-Projects
 A collection of my data visualization projects
 
-![p](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/889ba0f4-b570-4d10-a1e1-e88ee6d01c0a)
+![p](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/fec6a1c5-73a4-45c9-b772-f89f16062694)
+
 
 ![temp1](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/fcc3ac0d-3cf2-486e-be6e-1f3fea73f7eb)
 
