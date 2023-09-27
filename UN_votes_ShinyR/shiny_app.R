@@ -4,6 +4,10 @@ library(tidyverse)
 library(DT)
 library(shinythemes)
 
+# Data import
+load("~/UN_data/UNVotes.RData")
+glimpse(completeVotes)
+
 # Data cleaning
 Countrywise_vote <- completeVotes |>
   select(vote,Countryname, year) |>
@@ -76,7 +80,6 @@ server <- function(input, output, session){
   })
 }  
   
-
 shinyApp(ui = ui, server = server)
 
 
