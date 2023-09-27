@@ -4,6 +4,10 @@ library(tidyverse)
 library(DT)
 library(shinythemes)
 
+# Import data
+load("~/Desktop/Data_Portfolio/UN_data/UNVotes.RData")
+glimpse(completeVotes)
+
 # Data cleaning
 Countrywise_vote <- completeVotes |>
   select(vote,Countryname, year) |>
