@@ -1,6 +1,8 @@
 # Data-Visualization-Projects
 A collection of my data visualization projects
 
+![L1](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3cdde5f2-549d-4e73-99bb-5b4386dadd94)
+
 ![Provincial_distribution](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/7a67b61f-fd5a-4f00-8088-df864ba6cf84)
 
 ![p](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/fec6a1c5-73a4-45c9-b772-f89f16062694)
