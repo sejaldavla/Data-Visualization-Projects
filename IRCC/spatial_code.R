@@ -9,7 +9,7 @@ library(ggtext)
 
 # Load data ----------------------------------------------------------------------------------------------------------
 
-path <- "/Users/sejaldavla/Desktop/Data_Portfolio/Immigration Canada/EN_ODP-TR-Study-IS_PT_study_level_sign.xlsx"
+path <- "/EN_ODP-TR-Study-IS_PT_study_level_sign.xlsx"
 provincewise <- read_excel(path = path,
                            .name_repair = "unique")
 str(provincewise)
@@ -97,16 +97,6 @@ Province_pivot <- province1 |>
 
 ## Data visualization ---------------------------------------------------------------------------------------------------------------------------------------
 
-# Provincewise growth in internation student population
-
-Province_total |>
-  ggplot(aes(x = Year, y = Enrolment, group = States, color = States)) +
-  geom_line() +
-  scale_y_continuous(labels = label_comma()) +
-  theme_classic() 
-
-# Make a map plot
-
 # Start recording 
 
 gg_record(
@@ -119,7 +109,7 @@ gg_record(
 )
 
 
-# Create color palette and assign it to a value
+# Create a color palette and assign it to a value
 
 col_palette <- c("#808080","#4FFBDF","#00C2A8","#008B74", "#845EC2")
 names(col_palette) <- levels(factor(Province_pivot$Level))
@@ -176,7 +166,6 @@ provincial_distribution <- Province_pivot |>
 
 ggsave("Provincial_distribution.png", width = 20, height = 10, units = "in", dpi = 300)
 
-record_polaroid()
 
 
 
