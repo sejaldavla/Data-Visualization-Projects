@@ -12,7 +12,7 @@ library(ggtext)
 library(showtext)
 
 ## Data import and cleaning --------------------------------------------------------------------------------------------------------------------
-ircc <- read_excel("/Users/sejaldavla/Desktop/Data_Portfolio/Immigration Canada/EN_ODP_annual-TR-Study-IS_CITZ_year_end.xlsx")
+ircc <- read_excel("/EN_ODP_annual-TR-Study-IS_CITZ_year_end.xlsx")
 colnames(ircc) <- ircc[2,] # Change column names
 
 #Remove rows with non-data information
@@ -55,16 +55,6 @@ ircc_top <- ircc_long |>
   mutate(Country = str_replace(Country, "United Kingdom and Overseas Territories", "United Kingdom")) |>
   mutate(Country = str_replace(Country, "United States of America", "USA"))
 
-## Plots ----------------------------------------------------------------------------------------------------------------------------
-
-# Total recruitment
-ircc_year |>
-  ggplot(aes(x = Year, y = Total)) +
-  geom_col() +
-  geom_line() +
-  scale_y_continuous(labels = label_comma()) +
-  theme_classic()
-
 ## Circular Plot -------------------------------------------------------------------------------------------------------------------------------------
 
 # Fonts
@@ -73,12 +63,12 @@ font_add_google(name = "Lilita One")
 font_add_google(name = "Lekton")
 showtext_auto()
 
-# create a function for circular bar graph
+# create a function for a circular bar graph
 
 plot_circular <- function(year) {
   #Define color palette
   cp <- c('#00429d', '#3e67ae', '#618fbf', '#85b7ce', '#b1dfdb', '#ffcab9', '#fd9291', '#e75d6f', '#c52a52', '#93003a')
-  # Assign names to color palette
+  # Assign names to the color palette
   names(cp) <- ircc_top |>
     filter(Year == year) |>
     arrange(desc(Enrolment)) |>
@@ -139,9 +129,6 @@ p1 <- plot_circular(2022) +
            family = "Lekton")
 p1
 
-ggsave("p1.png", width = 3, height = 3, units = "in", dpi = 300)
-
-
 p2 <- plot_circular(2021) +
   geom_richtext(aes(y = Enrolment, 
                     label = scales::comma(Enrolment)),
@@ -166,9 +153,6 @@ p2 <- plot_circular(2021) +
            family = "Lekton")
 p2
 
-ggsave("p2.png", width = 3, height = 3, units = "in", dpi = 300)
-
-
 p3 <- plot_circular(2020) +
   geom_richtext(aes(y = Enrolment, 
                     label = scales::comma(Enrolment)),
@@ -191,10 +175,7 @@ p3 <- plot_circular(2020) +
            color = "black",
            size = 5,
            family = "Lekton")
-
 p3
-
-ggsave("p3.png", width = 3, height = 3, units = "in", dpi = 300)
 
 p4 <- plot_circular(2019) +
   geom_richtext(aes(y = Enrolment, 
@@ -218,10 +199,7 @@ p4 <- plot_circular(2019) +
            color = "black",
            size = 5,
            family = "Lekton")
-
 p4
-
-ggsave("p4.png", width = 3, height = 3, units = "in", dpi = 300)
 
 p5 <- plot_circular(2018) +
   geom_richtext(aes(y = Enrolment, 
@@ -245,11 +223,7 @@ p5 <- plot_circular(2018) +
            color = "black",
            size = 5,
            family = "Lekton")
-
 p5
-
-ggsave("p5.png", width = 3, height = 3, units = "in", dpi = 300)
-
 
 p6 <- plot_circular(2017) +
   geom_richtext(aes(y = Enrolment, 
@@ -275,9 +249,6 @@ p6 <- plot_circular(2017) +
            family = "Lekton")
 p6
 
-ggsave("p6.png", width = 3, height = 3, units = "in", dpi = 300)
-
-
 p7 <- plot_circular(2016) +
   geom_richtext(aes(y = Enrolment, 
                     label = scales::comma(Enrolment)),
@@ -301,9 +272,6 @@ p7 <- plot_circular(2016) +
            size = 5,
            family = "Lekton")
 p7
-
-ggsave("p7.png", width = 3, height = 3, units = "in", dpi = 300)
-
 
 p8 <- plot_circular(2015) +
   geom_richtext(aes(y = Enrolment, 
@@ -329,8 +297,6 @@ p8 <- plot_circular(2015) +
            family = "Lekton")
 p8 
 
-ggsave("p8.png", width = 3, height = 3, units = "in", dpi = 300)
-
 L1_title <- "Where do Canada's International students come from?"
 L1_subtitle <- "Ranking newly arrived international student population by top 10 nationalities each <span style = 'color:#845EC2'>year</span>"
 
@@ -355,50 +321,3 @@ L1 <- p8 + p7 + p6 + p5 + p4 + p3 + p2 + p1 +
 L1
 
 ggsave("L1.png", width = 9.2, height = 4.6, units = "in", dpi = 300)
-
-
-
-
-
-# Data source: https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv
-region <- read.csv("/Users/sejaldavla/Desktop/Data_Portfolio/Immigration Canada/all.csv")
-
-regions <- region |>
-  select(name, region, sub.region) |>
-  rename("Country" = "name")
-
-# Combine the data to include continent and subregion information
-ircc_1 <- ircc_long |>
-  left_join(regions, by = "Country")
-
-b <- ircc_1 |>
-  filter(is.na(region))
-
-unique(b$Country)
-  
-
-
-
-
-
-
-#treemap
-
-ircc_1 |>
-  filter(Country != "Total unique persons") |>
-  filter(Year == 2022 & Enrolment > 10) |>
-  ggplot(aes(area = Enrolment, fill = Country, label = Country, subgroup = region)) +
-  geom_treemap() +
-  geom_treemap_text(color = "black", place = "centre") +
-  theme(legend.position = "none") 
-
-
-a <- ircc_long |>
-  filter(Country == "Total unique persons") 
-
-a |> 
-  ggplot(aes(x = Year, y = Enrolment)) +
-  geom_line() +
-  scale_y_continuous(labels = label_comma())
-
-
