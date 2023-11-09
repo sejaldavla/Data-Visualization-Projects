@@ -11,30 +11,7 @@ library(camcorder)
 library(ggtext)
 library(showtext)
 
-## Data import and cleaning --------------------------------------------------------------------------------------------------------------------
-ircc <- read_excel("/EN_ODP_annual-TR-Study-IS_CITZ_year_end.xlsx")
-colnames(ircc) <- ircc[2,] # Change column names
-
-#Remove rows with non-data information
-dim(ircc)
-slice_head(ircc, n = 10)
-slice_tail(ircc, n = 10)
-ircc <- ircc[-c(1,2,228:233), ]
-
-# Arrange data for visualization and analysis
-ircc_long <- ircc %>%
-  pivot_longer(cols = starts_with("20"),
-               names_to = "Year",
-               values_to = "Enrolment") |>
-  rename("Country" = "Country of Citizenship") |>
-  mutate(Year = as.numeric(Year)) %>%
-  mutate(Enrolment = str_replace(Enrolment, "--","3")) |> # In the dataset values between 0 and 5 are shown as “--“. Change it to mean value (2.5) rounded to 3.
-  mutate(Enrolment = as.numeric(str_remove(Enrolment,","))) 
-sum(is.na(ircc_long)) # No NA values in the dataframe
-
-write.csv(ircc_long,"ircc_long.csv")
-
-##### -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Data was obtained from the Open Data Canada website 
 
 ## Data summary and visualization -------------------------------------------------------------------------------------------------------------------------------------
 
