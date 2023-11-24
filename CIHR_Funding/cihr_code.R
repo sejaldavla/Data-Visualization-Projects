@@ -3,6 +3,7 @@
 ## Data source: https://open.canada.ca/data/dataset/49edb1d7-5cb4-4fa7-897c-515d1aad5da3/resource/42300f81-a00a-4f0f-9ba9-842bb0e1971e/download/cihr_grants_award_202021.csv
 
 ####################################################################################################################
+# Required packages
 
 library(tidyverse)
 library(data.table)
@@ -13,37 +14,15 @@ library(ggbump)
 library(ggtext)
 library(BBmisc)
 library(hablar)
-library(feather)
+library(feather) 
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(raster)
+
 ####----------------------------------------------------------------------------------------------------------------
 
-# There are two way to open the dataset. Because the data has French letters, read_csv throws an error. Specify character encoding to read the df.
-
-cihr_df <- data.table::fread(here("cihr_grants_award_202021.csv"),
-                          encoding = "UTF-8")
-
-#OR
-
-cihr_df <- read_csv(here("cihr_grants_award_202021.csv"), 
-                 locale = locale(encoding = "latin1"),
-                 show_col_types = FALSE) |>
-  clean_names()
-
-
-cihr <- cihr_df |>
-  select(name_nom, org_nm, org_id, province_en, total_award_amount_montant_subvention_total, program_name_en, funding_type_en) |>
-  rename(pi_name = name_nom,
-         institite_name = org_nm,
-         institute_id = org_id,
-         province = province_en,
-         total_amount = total_award_amount_montant_subvention_total,
-         program_name = program_name_en,
-         funding_type = funding_type_en)
-
-cihr$pi_name <- stri_trans_general(str = cihr$pi_name, id = "Latin-ASCII")
-cihr$institite_name <- stri_trans_general(str = cihr$institite_name, id = "Latin-ASCII")
-cihr$province <- stri_trans_general(str = cihr$province, id = "Latin-ASCII")
-
-####-------------------------------------------------------------------------------------------------
+# Data Preparation
 
 cihr_province <- cihr |>
   group_by(province) |>
@@ -51,16 +30,7 @@ cihr_province <- cihr |>
   filter(province != "Unknown/Inconnu") |>
   mutate(province = str_replace(province, "North West Territories", "Northwest Territories"))
 
-
-#### Map
-library(sf)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(raster)
-
-can_province <- getData(country = "Canada", level = 1)
-
-# Obtain map coordinates and combine total finding data to it 
+# Combine Canadian map coordinates and total finding data to it 
 
 can_sf <- rnaturalearthdata::states50 |>
   st_as_sf() |>
@@ -79,6 +49,8 @@ rank <- st_geometry(can_sf) |>
                    fine_total_x = normalize(can_sf$total, range = c(first(x_axis_start), 40), method = "range"),
                    val_txt = paste0(format((can_sf$total)/1000000, digits = 2, nsmall = 2)),
                    val_txt2 = if_else(province == "Ontario", paste0(val_txt, " million canadian dollars"), val_txt)))
+
+# Plot
 
 st_text <- "Funding data from the Canadian Institutes of Health Research (CIHR) between 2007 and 2021 indicates that researchers in <span style='color:#F6C33AFF'>**Ontario**</span> and <span style='color:#E3DB38FF'>**Quebec**</span> overwhelmingly secured grants for biomedical and healthcare research."
 
@@ -143,41 +115,6 @@ province_funding <- ggplot() +
   
 ggsave("province_funding.png", width = 14, height = 7, dpi = 300)
 
-
-## Plot
-
-can_province |>
-  ggplot() +
-  geom_polygon(aes(x = long, y = lat, group = group),
-               color = "#F9f6EE",
-               fill = NA,
-               linewidth = 0.3) +
-  theme(panel.background = element_rect(fill = "black"),
-        axis.line = element_blank(),
-        panel.grid = element_blank())
-
-
-
-
-
-
-cihr %>%
-  ggplot(aes(x = province, y = total_amount)) +
-  geom_point(aes(color = province)) +
-  coord_flip(clip = "off") +
-  labs(
-    x = "",
-    y = "Competition Year",
-    color = NULL,
-    size = "Total Award Amount (CAD)"
-  ) +
-  scale_size(range = c(1, 10),
-             breaks = 1:10*100000000,
-             labels = scales::label_comma(
-               scale = 1/10^6,
-               suffix = "M"
-             )) + 
-  theme_classic()
 
 
 
