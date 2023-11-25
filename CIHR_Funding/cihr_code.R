@@ -59,34 +59,28 @@ province_funding <- ggplot() +
           linewidth = 0.3, 
           fill = "transparent", 
           color = "#828282") +
-  # Sigmoid from country to start of barchart
   geom_sigmoid(data = rank, 
                aes(x = X, y = Y, xend = x_axis_start - 0.2, yend = fine_total, group = province, color = fine_total), 
                alpha = 0.7, 
                smooth = 10, 
                size = 1.5) +
-  # Line from xstart to value
   geom_segment(data = rank, 
                aes(x = x_axis_start, y = fine_total, xend = fine_total_x + 2, yend = fine_total, color = fine_total), 
                alpha = 0.7, 
                linewidth = 1.5, 
                lineend = "round") +
-  # Y axis - black line
   geom_segment(data = rank, 
                aes(x = x_axis_start, y = 38, xend = x_axis_start, yend = 82), 
                alpha = 0.7, 
                linewidth = 1.3, 
                color = "black") +
-  # dot on centroid of province in map
   geom_point(data = rank, 
              aes(x = X, y = Y, color = fine_total), 
              size = 2) +
-  # Province text
   geom_text(data = rank, aes(x = x_axis_start, y = fine_total, label = province, color = fine_total), 
             hjust = 1, 
             size = 4, 
             nudge_y = 1) +
-  # Value text
   geom_text(data = rank, aes(x = fine_total_x + 3, y = fine_total, label = val_txt2, color = fine_total), 
             hjust = 0, 
             size = 3.5, 
