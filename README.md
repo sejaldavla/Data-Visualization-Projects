@@ -3,6 +3,8 @@ A collection of my data visualization projects
 
 ![province_funding](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/e2f95037-9000-40e4-8778-ed0c65c63793)
 
+<img width="2583" alt="cihr_wordcloud" src="https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/b288859c-ff1b-4ef3-9608-966d8626d710">
+
 ![L1](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3cdde5f2-549d-4e73-99bb-5b4386dadd94)
 
 ![Provincial_distribution](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3a2c142f-0044-4ca3-b4fd-9e2ecfd33f82)
