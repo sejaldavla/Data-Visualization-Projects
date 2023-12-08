@@ -5,4 +5,5 @@
 
 # This data shows which biomedical research topics have successfully secured funding in the last 15 years.
 
-<img width="2583" alt="cihr_funding" src="https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/dc677df8-4610-4f84-8dbf-96c3344ba63a">
+<img width="5620" alt="CIHR_Funding" src="https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/6e136c84-45da-45e9-99aa-54d0a0adcf26">
+
