@@ -5,6 +5,8 @@ A collection of my data visualization projects
 
 <img width="2583" alt="cihr_wordcloud" src="https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/b288859c-ff1b-4ef3-9608-966d8626d710">
 
+![gva_pooled_plot](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/960f351c-d8ce-4af2-8baf-cf9bec0b4dc2)
+
 ![L1](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3cdde5f2-549d-4e73-99bb-5b4386dadd94)
 
 ![Provincial_distribution](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3a2c142f-0044-4ca3-b4fd-9e2ecfd33f82)
