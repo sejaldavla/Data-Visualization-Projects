@@ -51,8 +51,19 @@ calendar_pooled <- calender_df |>
                            total %in% 21:30 ~ "21-30",
                            total %in% 31:40 ~ "31-40",
                            total %in% 41:50 ~ "41-50",
-                           total %in% 51:90 ~ "more than 50")) 
-
+                           total %in% 51:90 ~ "more than 50")) |>
+  mutate(Month_French = case_when(Month == "January" ~ "janvier",
+                                  Month == "February" ~ "février",
+                                  Month == "March" ~ "mars",
+                                  Month == "April" ~ "avril",
+                                  Month == "May" ~ "mai",
+                                  Month == "June" ~ "juin",
+                                  Month == "July" ~ "juillet",
+                                  Month == "August" ~ "août",
+                                  Month == "September" ~ "septembre",
+                                  Month == "October" ~ "octobre",
+                                  Month == "November" ~ "novembre",
+                                  Month == "December" ~ "décembre"))
 # color assignment
 
 pal_new <- c("#F9F871","#FFC55B","#FF3F00","#E4021B","#D758CD","#C900FF","#ffffff")
@@ -135,4 +146,82 @@ gva_pooled_plot <- calendar_pooled |>
 
 ggsave("gva_pooled_plot.png", width = 10, height = 4, units = "in")
 
+####---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+##French version
+
+calendar_pooled$Month_French <- ordered(calendar_pooled$Month_French, 
+                                        levels = c("janvier",
+                                                   "février", 
+                                                   "mars", 
+                                                   "avril", 
+                                                   "mai", 
+                                                   "juin", 
+                                                   "juillet", 
+                                                   "août", 
+                                                   "septembre", 
+                                                   "octobre", 
+                                                   "novembre", 
+                                                   "décembre"))
+
+# text
+
+title_french <- "Un problème très américain   <img src='pic.png' width='40'/>"
+subtitle_french <- glue("Ce calendrier montre le nombre total de personnes tuées et blessées chaque jour lors de fusillades aux États-Unis d'Amérique au cours des années 2021, 2022 et 2023.
+                        Chaque année, plus de 650 personnes sont tuées et plus de 2600 sont blessées.")
+caption_french <- "Source : Archives sur la violence armée • Graphique : Sejal Davla, PhD"
+
+
+# plot
+
+gva_pooled_plot_French <- calendar_pooled |>
+  ggplot(aes(x = Day, y = neg_week)) +
+  geom_tile(fill = "white",
+            color = "white") +
+  geom_point(data = drop_na(calendar_pooled),
+             aes(color = range_all, fill = range_all),
+             size = 2.5,
+             alpha = 0.7) +
+  geom_text(aes(label = mday),
+            color = "gray70",
+            size = 5,
+            family = "Play",
+            fontface = "bold") +
+  facet_grid(Year ~ Month_French,
+             switch = "y") +
+  labs(title = title_french,
+       subtitle = subtitle_french,
+       caption = caption_french) +
+  scale_color_manual(name = "",
+                     values = c("#F9F871","#FFC55B","#FF3F00","#E4021B","#D758CD","#C900FF"),
+                     labels = c("entre 1 et 10", "entre 11 et 20", "entre 21 et 30", "entre 31 et 40", "entre 41 et 50", "plus que 50"),
+                     guide = guide_legend(ncol = 6)) +
+  scale_fill_manual(name = "",
+                    values = c("#F9F871","#FFC55B","#FF3F00","#E4021B","#D758CD","#C900FF"),
+                    labels = c("entre 1 et 10", "entre 11 et 20", "entre 21 et 30", "entre 31 et 40", "entre 41 et 50", "plus que 50"),
+                    guide = guide_legend(ncol = 6)) + 
+  theme_void() +
+  theme(plot.title = element_markdown(size = 50,
+                                      family = "Bebas Neue"),
+        plot.subtitle = element_textbox_simple(family = "Space Grotesk",
+                                               color = "gray40",
+                                               size = 18,
+                                               lineheight = 0.4,
+                                               hjust = 0,
+                                               margin = margin(10, 0, 10, 0)),
+        plot.caption = element_text(size = 15,
+                                    color = "#1565C0",
+                                    hjust = 0.5),
+        strip.text = element_text(size = 20),
+        strip.text.y = element_text(angle = 90),
+        strip.clip = "off",
+        plot.background = element_rect(fill = "white"),
+        legend.position = "top",
+        legend.text = element_textbox(size = 16,
+                                      family = "Space Grotesk",
+                                      color = "gray40"),
+        legend.key.width = unit(0.5, "cm"),
+        plot.margin = margin(5,5,5,5)) 
+
+ggsave("gva_pooled_plot_french.png", width = 10, height = 4, units = "in")
 
