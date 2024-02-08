@@ -1,8 +1,6 @@
 # Required packages
-
 devtools::install_github("doehm/ggbrick",
                          force = TRUE)
-
 
 library(tidyverse)
 library(rvest)
@@ -586,45 +584,9 @@ fda_df <- fda_2023 |>
                                   disease_category == "Neurology" ~ "Neurology",
                                   .default = "other"))
 
-
-summary_df <- fda_df |>
-  select(year, disease_category) |>
-  group_by(year, disease_category) |>
-  count() |>
-  arrange(desc(n))
-
-
-col_pal <- c("#788FCE", "#BD8184", "#E6956F", "#F2CC8F", "#A6BA96", "#C5E8E3", 
-             "#F4F1DE", "#CDC3D4", "#A88AD2", "#60627C", "#E55381", "#B2F7EF",
-             "#4DA167", "#F2B5D4", "#3C7A89", "#FCECC9", "white", "grey", "grey10")
-
-drug_scale <- c("Oncology" = "#F2B5D4",
-                "Neurology" = "#B2F7EF",
-                "Endocrinology" = "#A88AD2",
-                "Hematology" = "#A88AD2",
-                "Genetic disorder" = "#A88AD2",          
-                "Nephrology" = "#A88AD2", 
-                "Infectious diseases" = "#A88AD2",
-                "Obstetrics and Gynecology" = "#A88AD2",
-                "Opthalmology" = "#A88AD2",
-                "Cardiovascular" = "#A88AD2",            
-                "Dermatology" = "#A88AD2",               
-                "Gastroenterology" = "#A88AD2",
-                "Respiratory" = "#A88AD2",               
-                "Cardiology" = "#A88AD2",                
-                "Immunology" = "#A88AD2",               
-                "Surgical" = "#A88AD2",                  
-                "Urology" = "#A88AD2",                   
-                "Supplement" = "#A88AD2",
-                "Orthopedic" = "#A88AD2",                
-                "Diagnostics" = "#A88AD2",               
-                "Hepatology" = "#A88AD2",               
-                "Pulmonary" = "#A88AD2") 
-
 drug_scale_new <- c("Oncology" = "#F2B5D4",
                 "Neurology" = "#B2F7EF",
                 "other" = "#F4F1DE")
-
 
 # fonts
 font_add_google(name = "Josefin Slab", family = "josefinslab")
@@ -640,7 +602,6 @@ infectious diseases, cardiovascular, endocrinology, as well as diagnostics and s
 
 caption_text <- "Source: US Food and Drug Administration (FDA) • Graphic: Sejal Davla, PhD"
                           
-
 plot_data <- fda_df |>
   count(year, new_category) |>
   arrange() |>
@@ -697,34 +658,4 @@ plot_data <- fda_df |>
 plot_data  
 
 ggsave("plot_data.png", width = 7, height = 5, units = "in")
-
-
-fda_df |>
-  count(disease_category, year) |>
-  arrange(desc(n)) |>
-  ggplot(aes(year, disease_category, size = n)) +
-  geom_point() +
-  theme_minimal()
-
-
-####-------------------------------------------------------------------------------------------------
-
-library(waffle)
-
-fda_df |>
-  count(disease_category, year) |>
-  ggplot(aes(fill = disease_category, values = n)) +
-  geom_waffle(na.rm = TRUE,
-              size = 0.5,
-              color = "white",
-              flip = TRUE) +
-  facet_wrap(~ year) +
-  scale_fill_viridis_d(option = "B") 
-
-
-
-fda_df |>
-  count(year, new_category) |>
-  mutate(new_category = factor(new_category, levels = c("other", "Oncology", "Neurology"))) |>
-  arrange()
   
