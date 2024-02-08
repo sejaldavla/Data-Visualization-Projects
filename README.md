@@ -7,6 +7,8 @@ A collection of my data visualization projects
 
 ![gva_pooled_plot](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/6c69b473-9585-4046-a508-c46b2ba7cc79)
 
+![plot_data](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/2a002d3a-d427-4e3d-a786-e5b7e3781fb4)
+
 ![L1](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3cdde5f2-549d-4e73-99bb-5b4386dadd94)
 
 ![Provincial_distribution](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3a2c142f-0044-4ca3-b4fd-9e2ecfd33f82)
