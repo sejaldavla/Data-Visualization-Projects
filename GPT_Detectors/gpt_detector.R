@@ -64,6 +64,8 @@ st_text <- "While most AI-text detectors boast about their near-perfect accuracy
             these **detectors showed only 24-52% accuracy** in denoting them as human-generated content."
 c_text <- "Source: TidyTuesday (Zhou et al, DOI:10.1016/j.patter.2023.100779) • Graphic: Sejal Davla, PhD"
 
+# plot
+
 gpt_detector_plot <- human_summary |>
   filter(pred_class == "Human") |>
   mutate(native = factor(native, levels = c("Yes", "No"))) |>
@@ -128,6 +130,8 @@ gpt_detector_plot <- human_summary |>
                              keyheight = 0.7,
                              label.theme = element_markdown(family = "ubuntu",
                                                         size = 25)))
+
+# save plot
 
 ggsave("gpt_detector_plot.png", width = 6, height = 6, units = "in", dpi = 300)
 
