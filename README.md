@@ -25,5 +25,6 @@ A collection of my data visualization projects
 
 ![final_plot](https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/3132f81a-1c38-4c96-a0f4-09e0b1c3888f)
 
-https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/ae61f8ce-8fac-4d57-b05f-5fc35ff01069
+https://github.com/sejaldavla/Data-Visualization-Projects/assets/77356703/e5cbbaed-9a87-4e05-a802-4130889b953a
+
 
